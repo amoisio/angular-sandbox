@@ -32,6 +32,19 @@ export class HeroService {
       );
   }
 
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
+
+  updateHero(hero: Hero): Observable<any> {
+    const updateUrl = `${this.heroesUrl}/${hero.id}`;
+    return this.http.put<Hero>(updateUrl, hero, this.httpOptions)
+      .pipe(
+        tap(_ => this.log(`updated hero id=${hero.id}`)),
+        catchError(this.handleError<any>('updateHero'))
+      );
+  }
+
   private heroesUrl = "api/heroes";
 
   private log(message: string): void {
